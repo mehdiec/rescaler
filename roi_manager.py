@@ -272,9 +272,20 @@ class RoiManager:
         self.finalize_and_remove_layer()
 
     def on_validate(self, viewer):
-        self.animal.attrs
-        # populate it
-        pass
+        attributes = ["Macro_XYs", "MidLine_XYs", "Neck_XYs"]
+
+        # Mapping of attributes to their corresponding coordinate variables
+        mapping = {
+            "Macro_XYs": self.clicked_coordinates,
+            "MidLine_XYs": self.line_coordinates_midline,
+            "Neck_XYs": self.line_coordinates_neck,
+        }
+
+        for attribute in attributes:
+            # Overwrite existing values element-wise
+            for i, value in enumerate(mapping[attribute]):
+                self.animal.attrs[attribute][i] = value
+            print(self.animal.attrs[attribute])
 
 
 def main():
