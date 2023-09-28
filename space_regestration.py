@@ -65,10 +65,16 @@ class RoiManager:
         skip_button.clicked.connect(self.on_skip)
         self.viewer.window.add_dock_widget(skip_button)
 
+        validate_button = QPushButton("Validate")
+        validate_button.clicked.connect(self.on_validate)
+        self.viewer.window.add_dock_widget(validate_button)
+
         self.viewer.bind_key("z", self.on_undo)
         self.viewer.bind_key("q", self.on_skip)
+        self.line_coordinates_neck = []  # [self.first_line_point, coordinates]
+        self.line_coordinates_midline = []  # [self.first_line_point, coordinates]
 
-        # TO DO undo button for
+        # TO DO
         # the line the neckline
         # get this into a file .txt for pipeline
         attributes = ["Macro_XYs", "MidLine_XYs", "Neck_XYs"]
@@ -100,7 +106,6 @@ class RoiManager:
         ------
         None
         """
-        print(f"Mouse down for {'line' if self.layer_removed else 'roi'}")
         dragged = False
         yield
 
@@ -109,7 +114,6 @@ class RoiManager:
             yield
 
         if dragged:
-            print(f"Drag end for {'line' if self.layer_removed else 'roi'}")
             return
 
         self.handle_click(event)
@@ -123,17 +127,33 @@ class RoiManager:
         event : napari.utils.event.Event
             The event triggered.
         """
-        print(f"Clicked for {'line' if self.layer_removed else 'roi'}!")
         coordinates = np.round(event.position).astype(int)[1:]
 
         if self.layer_removed:
-            self.line_logic(coordinates)
-            time.sleep(1)
-            self.line_layer.visible = False
+            self.handle_line_click(coordinates)
         else:
             self.roi_logic(coordinates)
 
-    def line_logic(self, coordinates):
+    def handle_line_click(self, coordinates):
+        """
+        Handle line clicks.
+
+        Parameters
+        ----------
+        coordinates : np.ndarray
+            The coordinates where the line should be drawn.
+        """
+
+        if (
+            len(self.line_coordinates_neck) > 0
+            and len(self.line_coordinates_midline) > 0
+        ):
+            return
+        line_type = "neck" if len(self.line_coordinates_midline) > 0 else "mid"
+
+        self.line_logic(coordinates, line_type)
+
+    def line_logic(self, coordinates, line_type):
         """
         Logic for line drawing.
 
@@ -141,15 +161,21 @@ class RoiManager:
         ----------
         coordinates : np.ndarray
             The coordinates where the line should be drawn.
+        line_type : str
+            Type of line ("mid" or "neck").
         """
         self.line_click_count += 1
 
         if self.line_click_count == 1:
             self.first_line_point = coordinates
-        elif self.line_click_count == 2:
+            return
+
+        if self.line_click_count == 2:
             self.draw_line(self.first_line_point, coordinates)
-            self.line_coordinates = [self.first_line_point, coordinates]
-            self.line_click_count = 0
+        if line_type == "neck":
+            self.line_coordinates_neck = [self.first_line_point, coordinates]
+        elif line_type == "mid":
+            self.line_coordinates_midline = [self.first_line_point, coordinates]
 
     def draw_line(self, start_coord, end_coord):
         """
@@ -162,7 +188,9 @@ class RoiManager:
         end_coord : np.ndarray
             The ending coordinate of the line.
         """
+
         self.line_layer.add(np.array([start_coord, end_coord]), shape_type="line")
+        self.line_click_count = 0
 
     def roi_logic(self, coordinates):
         """
@@ -202,14 +230,19 @@ class RoiManager:
 
         print("Layer hidden.")
 
-    def on_undo(self):
+    def on_undo(self, viewer):
         """
         Undo the last action.
         """
-        if (not self.line_layer.visible) & self.layer_removed:
+        if len(self.line_coordinates_neck) > 0 & self.layer_removed:
             self.line_layer.visible = True
             self.line_layer.data = np.delete(self.line_layer.data, -1, axis=0)
-            self.line_coordinates.clear()
+            self.line_coordinates_neck.clear()
+            return
+        if len(self.line_coordinates_midline) > 0 & self.layer_removed:
+            self.line_layer.visible = True
+            self.line_layer.data = np.delete(self.line_layer.data, -1, axis=0)
+            self.line_coordinates_midline.clear()
             return
 
         if self.layer_removed:
@@ -237,6 +270,11 @@ class RoiManager:
         """
         print("Skipped.")
         self.finalize_and_remove_layer()
+
+    def on_validate(self, viewer):
+        self.animal.attrs
+        # populate it
+        pass
 
 
 def main():
