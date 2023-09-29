@@ -1,0 +1,107 @@
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: #2e2e2e;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+#all {
+    display: flex;
+}
+
+.sidebar {
+    width: 25%;
+    background-color: #1e1e1e;
+    /* Different shade for sidebar */
+    overflow-y: auto;
+    height: 100vh;
+    position: fixed;
+    padding: 20px;
+    color: white;
+}
+
+.collapsed {
+    width: 0;
+    padding: 0;
+}
+
+.main-content {
+    margin-left: 25%;
+    padding: 20px;
+    background-color: #2e2e2e;
+}
+
+.toggle-button {
+    position: fixed;
+    left: 0;
+    top: 0;
+    /* Stick to the top of the page */
+    z-index: 2;
+    height: 20px;
+    /* Smaller height */
+    width: 20px;
+    /* Smaller width */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    font-size: 16px;
+}
+
+.autocomplete-container {
+    width: 80%;
+    margin: 10px auto;
+}
+
+input[type="text"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+ul.suggestion-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #333;
+    color: white;
+}
+
+ul.suggestion-list li {
+    padding: 4px 8px;
+    /* Small padding */
+    cursor: pointer;
+    color: white;
+}
+
+.sidebar label {
+    padding: 8px 16px;
+    /* Add padding to top-bottom and left-right */
+
+    /* Makes it occupy the full width */
+    margin: 4px 0;
+    /* Optional: Add some margin to top and bottom */
+}
+
+.tab {
+    padding: 12px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    background-color: #444;
+    color: white;
+}
