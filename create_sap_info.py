@@ -139,13 +139,13 @@ class SAPConfigGenerator:
         time_ref_dict : dict
             The time reference data for the animals.
         """
-        movie_path = Path("full_movies")
-        for file_name in os.listdir(self.input_folder / movie_path):
-            if file_name[0].isalpha() and not file_name.lower().endswith(
-                (".png", ".tif")
-            ):
-                continue
-            self.generate_sap_config(rescaling_data, time_ref_dict)
+        # movie_path = Path("full_movies")
+        # for file_name in os.listdir(self.input_folder / movie_path):
+        #     if file_name[0].isalpha() and not file_name.lower().endswith(
+        #         (".png", ".tif")
+        #     ):
+        #         continue
+        self.generate_sap_config(rescaling_data, time_ref_dict)
 
 
 def generate_sap_files(
@@ -172,6 +172,8 @@ def generate_sap_files(
     """
 
     # Create output folder path
+    input_folder_path = Path(input_folder_path)
+
     output_folder_path = input_folder_path / "SAP_info"
 
     # Initialize the SAPConfigGenerator
@@ -187,12 +189,13 @@ def generate_sap_files(
         rescaling_data = config_generator.read_rescaling_file(rescaling_file_path)
     except FileNotFoundError:
         print("file does not exist")
-        return
+        rescaling_data = {}
+        pass
 
     # Check if rescaling data is available
     if not rescaling_data:
         print("Warning: No rescaling file could be read.")
-        return
+        pass
 
     # Placeholder for time reference data, populate this as needed
     time_ref_dict = {}
@@ -215,3 +218,9 @@ def generate_sap_files(
     with open(output_file_path, "w") as file:
         file.write(content)
     print(f"Generated file: {output_file_path}")
+
+
+if __name__ == "__main__":
+    generate_sap_files(
+        "/Volumes/u934/equipe_bellaiche/m_ech-chouini/test_zar/wRNAi_12", "wRNAi_12"
+    )
