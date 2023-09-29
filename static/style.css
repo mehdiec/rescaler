@@ -1,3 +1,11 @@
+ /*
+CSS for the main interaction
+*/
+html {
+    width: 100wh;
+    height: 100vh;
+}
+
 body {
     font-family: 'IBM Plex Sans', sans-serif;
     background-color: #2e2e2e;
@@ -6,19 +14,98 @@ body {
     padding: 0;
 }
 
-#all {
+.tabset {
+    height: 100%;
+    width: 100%;
+    padding-left: 20px;  /* Add 20px padding to the left */
+}
+
+.tabset>input[type="radio"] {
+    position: absolute;
+    left: -200vw;
+}
+
+.tabset .tab-panel {
+    display: none;
+}
+
+.tab-panels {
+    height: 100%;
+    width: 100%;
+}
+
+.tabset>input:first-child:checked~.tab-panels>.tab-panel:first-child,
+.tabset>input:nth-child(3):checked~.tab-panels>.tab-panel:nth-child(2),
+.tabset>input:nth-child(5):checked~.tab-panels>.tab-panel:nth-child(3),
+.tabset>input:nth-child(7):checked~.tab-panels>.tab-panel:nth-child(4),
+.tabset>input:nth-child(9):checked~.tab-panels>.tab-panel:nth-child(5),
+.tabset>input:nth-child(11):checked~.tab-panels>.tab-panel:nth-child(6) {
     display: flex;
+}
+ 
+.tabset>label {
+    position: relative;
+    display: inline-block;
+    padding: 5px 15px 15px;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tabset>label::after {
+    content: "";
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    width: 22px;
+    height: 4px;
+    background: #8d8d8d;
+}
+
+.tabset>label:hover,
+.tabset>input:focus+label {
+    color: #06c;
+}
+
+.tabset>label:hover::after,
+.tabset>input:focus+label::after,
+.tabset>input:checked+label::after {
+    background: #06c;
+    width: calc(100% - 30px);
+}
+
+.tabset>input:checked+label {
+    border-color: #ccc;
+    border-bottom: 1px solid #fff;
+    margin-bottom: -1px;
+}
+
+.tab-panel {
+    padding: 30px 0;
+    border-top: 1px solid #ccc;
+    height: 100%;
+    width: 100%;
+}
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
 }
 
 .sidebar {
-    width: 25%;
-    background-color: #1e1e1e;
-    /* Different shade for sidebar */
-    overflow-y: auto;
+    position: fixed;  /* Make sidebar fixed */
+    top: 0;
+    left: 0;
     height: 100vh;
-    position: fixed;
-    padding: 20px;
-    color: white;
+    width: 0;  /* initially collapsed */
+    background-color: #1e1e1e;
+    overflow-x: hidden;
+    overflow-y: auto;
+  
+    transition: 0.5s;  /* smooth transition */
+    padding: 0;  /* Remove padding when collapsed */
 }
 
 .collapsed {
@@ -27,9 +114,11 @@ body {
 }
 
 .main-content {
-    margin-left: 25%;
+    margin-left: 25%;  /* or whatever the width of your sidebar is when expanded */
+    transition: margin-left 0.5s;  /* optional: for smooth transition */
+    margin-left: 0;  /* No margin when the sidebar is collapsed */
     padding: 20px;
-    background-color: #2e2e2e;
+    background-color: #2e2e2e; 
 }
 
 .toggle-button {

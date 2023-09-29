@@ -1,3 +1,42 @@
+// const htmlTemplate = ` 
+// <form>
+//   <label for="dt">dt:</label>
+//   <input type="number" step="0.01" id="dt" name="dt"><br>
+
+//   <label for="zoom-level">Zoom Level:</label>
+//   <input type="number" step="0.01" id="zoom-level" name="zoom-level">
+  
+//   <label for="binning">Binning:</label>
+//   <input type="number" step="0.01" id="binning" name="binning"><br>
+
+//   <label for="n_digits">n_digits:</label>
+//   <input type="number" id="n_digits" name="n_digits"><br>
+
+//   <label for="temperature">Temperature:</label>
+//   <input type="number" id="temperature" name="temperature"><br>
+
+//   <label for="box_size">Box Size:</label>
+//   <select id="box_size" name="box_size">
+//     <option value="small">Small</option>
+//     <option value="medium">Medium</option>
+//     <option value="large">Large</option>
+//   </select><br>
+
+//   <label for="fraction">Fraction:</label>
+//   <input type="text" placeholder="int/int" id="fraction" name="fraction"><br>
+
+//   <label for="quantity">Quantity:</label>
+//   <select id="quantity" name="quantity">
+//     <option value="option1">Option 1</option>
+//     <option value="option2">Option 2</option>
+//     <!-- Add more options here -->
+//   </select><br>
+
+//   <label for="timing">Timing:</label>
+//   <input type="text" placeholder="int h int" id="timing" name="timing"><br>
+
+// </form> 
+// `
 let checkStreamlit = setInterval(function () {
     if (typeof streamlit !== "undefined") {
         // Your code that uses streamlit.sendBack
@@ -66,7 +105,7 @@ function populateCheckboxes(subFolders) {
         label.htmlFor = folder;
         label.appendChild(document.createTextNode(folder));
         checkbox.addEventListener('change', function () {
-            toggleTab(folder, this.checked);
+            handleCheckboxToggle(folder, this.checked);
         });
 
         checkboxContainer.appendChild(checkbox);
@@ -98,24 +137,110 @@ function sendToStreamlit() {
 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('collapsed');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebar.style.width === '0px' || !sidebar.style.width) {
+        sidebar.style.width = '25%';
+        sidebar.style.padding = '20px';  /* Restore padding when expanded */
+        mainContent.style.marginLeft = '25%';
+    } else {
+        sidebar.style.width = '0px';
+        sidebar.style.padding = '0';  /* Remove padding when collapsed */
+        mainContent.style.marginLeft = '0';
+    }
 }
+ 
+
+ 
+
+// Define the form HTML template here
+const htmlTemplate = `
+  <form>
+    <label for="dt">dt:</label>
+    <input type="number" step="0.01" id="dt" name="dt"><br>
+    <!-- Add other form elements here -->
+  </form>
+`;
+
+let lastChecked = null;  // Keep track of the last checked radio button
 
 function toggleTab(folder, isChecked) {
-    const tabsContainer = document.getElementById('tabs-container');
+    const tabset = document.getElementById('tabset');
+    const tabPanels = document.getElementById('tab-panels');
+
+    const generatedId = `tab-${folder}`;  // Generate a unique ID
 
     if (isChecked) {
-        // Create a new tab if the checkbox is checked
-        const newTab = document.createElement('div');
-        newTab.id = `tab-${folder}`;
-        newTab.className = 'tab';
-        newTab.innerHTML = `<span>${folder}</span>`;
-        tabsContainer.appendChild(newTab);
+        // Create new tab radio input and label if checkbox is checked
+        const newInput = document.createElement('input');
+        newInput.type = 'radio';
+        newInput.name = 'tabset';
+        newInput.id = generatedId;
+        newInput.setAttribute('aria-controls', folder);
+        newInput.addEventListener('click', function () {
+            if (this === lastChecked) {
+                this.checked = false;  // Uncheck if already checked
+                lastChecked = null;     // Reset lastChecked
+            } else {
+                lastChecked = this;     // Update lastChecked
+            }
+        });
+
+        const newLabel = document.createElement('label');
+        newLabel.htmlFor = generatedId;
+        newLabel.innerText = folder;
+ 
+        // Create new tab panel as a section
+        const newPanel = document.createElement('section');
+        newPanel.className = 'tab-panel';
+        newPanel.id = folder;
+        // Add HTML template to the new tab panel
+        newPanel.innerHTML = htmlTemplate;
+
+        tabset.appendChild(newInput);
+        tabset.appendChild(newLabel);
+        tabPanels.appendChild(newPanel);
+        const panels = document.querySelectorAll('.tab-panel');
+        panels.forEach(panel => {
+            panel.style.display = 'none'; // hide all panels
+          });
     } else {
-        // Remove the tab if the checkbox is unchecked
-        const existingTab = document.getElementById(`tab-${folder}`);
-        if (existingTab) {
-            tabsContainer.removeChild(existingTab);
+        // Remove the tab radio input and label if checkbox is unchecked
+        const existingInput = document.getElementById(generatedId);
+        const existingLabel = document.querySelector(`label[for='${generatedId}']`);
+        const existingPanel = document.getElementById(folder);
+
+        if (existingInput && existingLabel && existingPanel) {
+            tabset.removeChild(existingInput);
+            tabset.removeChild(existingLabel);
+            tabPanels.removeChild(existingPanel);
         }
     }
 }
+ 
+
+ 
+
+// Combine both functions to handle checkbox toggle
+function handleCheckboxToggle(folder, isChecked) {
+    toggleTab(folder, isChecked); 
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const tabset = document.getElementById('tabset');
+    tabset.addEventListener('change', function(e) {
+      const id = e.target.getAttribute('aria-controls');
+      const panels = document.querySelectorAll('.tab-panel');
+      
+      panels.forEach(panel => {
+        panel.style.display = 'none'; // hide all panels
+      });
+      
+      const activePanel = document.getElementById(id);
+      if (activePanel) {
+        activePanel.style.display = 'flex'; // show the selected panel
+      }
+    });
+  });
+  

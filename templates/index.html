@@ -1,37 +1,44 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+  <head>
     <title>Zarrify</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-</head>
+  </head>
 
-<body>
-        <button class="toggle-button" onclick="toggleSidebar()">☰</button>
+  <body>
+    <div class="main-content">
+      <div class="tabset" id="tabset">
+        <!-- Dynamic tabs will be populated here -->
+    </div>
+    <div class="tab-panels" id="tab-panels">
+      <!-- Dynamic tab panels will be populated here -->
+    </div>
+
+    </div>
+    <button class="toggle-button" onclick="toggleSidebar()">☰</button>
 
     <div id="all">
-        <div class="sidebar" id="sidebar">
-      
-            <div class="autocomplete-container" id="input-container-1">
-                <label for="project_folder">Target Folder:</label>
-                <input type="text" id="project_folder" oninput="getSuggestions('project_folder', 'suggestion-list')" placeholder="Type target folder path">
-                <ul class="suggestion-list" id="suggestion-list"></ul>
-            </div>
-            <div id="zarrify_button">
-                <button onclick="sendToStreamlit()">Validate</button>
-            </div>
-            <div id="checkbox-container">
-  <!-- Checkboxes will be populated here -->
-</div>
+      <div class="sidebar" id="sidebar">
 
-</div>
-<div class="main-content">
-            <div id="tabs-container">
-              <!-- Tabs will be populated here -->
-            </div>
+        <div class="autocomplete-container" id="input-container-1">
+          <label for="project_folder">Target Folder:</label>
+          <input type="text" id="project_folder"
+            oninput="getSuggestions('project_folder', 'suggestion-list')"
+            placeholder="Type target folder path">
+          <ul class="suggestion-list" id="suggestion-list"></ul>
         </div>
+        <div id="zarrify_button">
+          <button onclick="sendToStreamlit()">Validate</button>
+        </div>
+        <div id="checkbox-container">
+          <!-- Checkboxes will be populated here -->
+        </div>
+
+      </div>
+
     </div>
-</body>
+  </body>
 
 </html>
