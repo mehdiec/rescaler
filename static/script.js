@@ -154,9 +154,10 @@ function toggleSidebar() {
  
 
 // Define the form HTML template here
-const htmlTemplate = `
+
+const htmlTemplateMap = `
   <form>
-    <label for="dt">dt:</label>
+    <label for="dt">les Anaimals:</label>
     <input type="number" step="0.01" id="dt" name="dt"><br>
     <!-- Add other form elements here -->
   </form>
@@ -165,6 +166,17 @@ const htmlTemplate = `
 let lastChecked = null;  // Keep track of the last checked radio button
 
 function toggleTab(folder, isChecked) {
+    const htmlTemplate = `
+  <form>
+    <label for="attribute1">Attribute 1:</label>
+    <input type="text" id="attribute1" name="attribute1"><br>
+    <label for="attribute2">Attribute 2:</label>
+    <input type="text" id="attribute2" name="attribute2"><br>
+    <!-- Add other form elements here -->
+    <button type="button" onclick="copyAttributes('${folder}')">Copy Attributes</button>
+    <button type="button" onclick="validateAndSend('${folder}')">Validate and Send</button>
+  </form>
+`;
     const tabset = document.getElementById('tabset');
     const tabPanels = document.getElementById('tab-panels');
 
@@ -225,6 +237,53 @@ function toggleTab(folder, isChecked) {
 function handleCheckboxToggle(folder, isChecked) {
     toggleTab(folder, isChecked); 
 }
+function addNewTabPanel() {
+    const tabset = document.getElementById('tabset');
+    const tabPanels = document.getElementById('tab-panels');
+    const map_string = 'map_parameter';  // Unique ID
+    const generatedId = `tab-${map_string}`;  // Generate a unique ID
+
+    if (mapParameterTabExists) {
+        // If the tab already exists, toggle its visibility
+        const existingPanel = document.getElementById(generatedId);
+        existingPanel.style.display = existingPanel.style.display === 'none' ? 'flex' : 'none';
+        return;  // Exit the function here
+    }
+
+    // Create new tab radio input and label
+    const newInput = document.createElement('input');
+    newInput.type = 'radio';
+    newInput.name = 'tabset';
+    newInput.id = generatedId;
+    newInput.setAttribute('aria-controls', map_string);
+    newInput.addEventListener('click', function () {
+        if (this === lastChecked) {
+            this.checked = false;
+            lastChecked = null;
+        } else {
+            lastChecked = this;
+        }
+    });
+
+    const newLabel = document.createElement('label');
+    newLabel.htmlFor = generatedId;
+    newLabel.innerText = map_string;
+
+    // Create new tab panel as a section
+    const newPanel = document.createElement('section');
+    newPanel.className = 'tab-panel';
+    newPanel.id = map_string;
+    newPanel.style.display = 'flex';  // Make sure it's visible
+    // Add HTML template to the new tab panel
+    newPanel.innerHTML = htmlTemplateMap;
+
+    // Append new elements to the DOM
+    tabset.appendChild(newInput);
+    tabset.appendChild(newLabel);
+    tabPanels.appendChild(newPanel);
+
+    mapParameterTabExists = true;  // Set the flag to true
+}
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -243,4 +302,26 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   });
-  
+  let mapParameterTabExists = false;  // Flag to indicate if the map_parameter tab exists or not
+ 
+  function toggleCollapse(elementId) {
+    const element = document.getElementById(elementId);
+    if (element.style.maxHeight) {
+      element.style.maxHeight = null;
+    } else {
+      element.style.maxHeight = '33vh';  // You can adjust this value
+    }
+  }
+   
+
+function copyAttributes(folder) {
+    // Logic to copy attributes to other animals.
+    // You can access the form elements by their IDs or names
+    console.log("Copy attributes for folder:", folder);
+}
+
+function validateAndSend(folder) {
+    // Logic to validate the parameters and send them to the backend
+    // You can access the form elements by their IDs or names
+    console.log("Validate and send data for folder:", folder);
+}
