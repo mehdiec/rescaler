@@ -140,32 +140,48 @@ body {
 
 .toggle-button {
     /* position: fixed;  Fixed position */
-    top: 10px;  /* Position it at the top */
-    left: 10px;  /* Position it on the left */
-    z-index: 100;  /* Make sure it's above other elements */
-    
-    height: 50px;
-    width: 50px;
-    background-color: #4CAF50;
-    color: white;
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-weight: 400;
+    border-radius: 0.5rem;
+    margin: 0px 0.125rem;
+    color: inherit;
+    width: auto;
+    user-select: none;
+    background-color: transparent;
     border: none;
-    border-radius: 25px; /* Rounded corners */
-    box-shadow: 0px 0px 15px #888888; /* Shadow for depth */
-    font-size: 24px; /* Bigger font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
- 
-  
+    font-size: 14px;
+    line-height: 1;
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0px;
 }
-
+  
+ 
 .toggle-button:hover {
-    background-color: #45a049; /* Slightly darker green on hover */
+    background-color: #242424; /* Slightly darker green on hover */
 }
 
 .autocomplete-container {
     width: 80%;
     margin: 10px auto;
 }
+
+/* Style the checkboxes */
+input[type="checkbox"] {
+    transform: scale(1.3); /* Increase the size */
+    margin-right: 5px; /* Add some spacing between checkbox and label */
+}
+
+/* Style the labels for checkboxes */
+label[for] {
+    font-size: 16px; /* Adjust the font size */
+    vertical-align: middle; /* Vertically align the label with the checkbox */
+}
+
 
 input[type="text"],
 button {
@@ -214,20 +230,133 @@ ul.suggestion-list li {
     background-color: #444;
     color: white;
 }
+/* Style the collapsible content container */
 .collapsible-content {
     max-height: 0;
-    overflow-y: scroll;
-    transition: max-height 0.2s ease-in-out; 
-  }
- 
-  .collapsible-content button {
-    display: block; /* Display block */
-    margin: auto; /* Centering */
-    width: 90%; /* Slightly narrower */
-    padding: 12px 30px; /* More padding */
-    border: 2px solid #666; /* Thicker border */
-    border-radius: 8px; /* More rounded corners */
-    background-color: #555; /* Different background */
-    color: #fff; /* White text */
-    font-weight: bold; /* Bold text */
+    overflow: hidden;
+    transition: max-height 0.2s ease-in-out;
 }
+
+/* Style the button inside the collapsible content */
+.collapsible-content button {
+    background-color: #3f3f3f; /* Blue background color */
+    color: #fff; /* White text color */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for better appearance */
+    font-size: 16px;
+    cursor: pointer;
+   
+     
+}
+
+.collapsible-content button:hover {
+    background-color: #a8a8a8; /* Darker blue on hover */
+}
+
+/* Style the content inside the collapsible container */
+.collapsible-content .content {
+    padding: 10px; /* Add padding to the content */
+}
+
+/* Style the content inside the collapsible container */
+.collapsible-content .content label {
+    display: block; /* Display labels as block elements */
+    margin-bottom: 5px; /* Add spacing between labels */
+}
+
+ 
+
+/* Styles for the open button (>) */
+.open-sidebar-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    /* Other styling */
+  }
+  
+  /* Styles for the close button (X) */
+  .close-sidebar-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    /* Other styling */
+  }
+  
+
+  .wrap-collabsible {
+    margin-bottom: 1.2rem 0;
+  }
+.lbl-toggle {
+  position: relative; /* Add relative positioning */
+  z-index: 1; /* Set a higher z-index than the checkboxes */
+  display: block;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem; 
+  background: #1e1e1e;
+  /* background: #18181800; */
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all 0.25s ease-out;
+}
+
+.lbl-toggle:hover {
+  color: #570000;
+}
+
+.lbl-toggle::before {
+  content: ' ';
+  display: inline-block;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid currentColor;
+  vertical-align: middle;
+  margin-right: .7rem;
+  transform: translateY(-2px);
+  transition: transform .2s ease-out;
+}
+
+.toggle:checked + .lbl-toggle::before {
+  transform: rotate(90deg) translateX(-3px);
+}
+
+.collapsible-content {
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height .25s ease-in-out;
+  position: relative; /* Add relative positioning */
+  z-index: 0; /* Set a lower z-index than the title */
+}
+
+.toggle:checked + .lbl-toggle + .collapsible-content {
+  max-height: 100vh;
+  z-index: 1; /* Set a higher z-index when expanded to cover checkboxes */
+}
+
+.toggle:checked + .lbl-toggle {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.collapsible-content .content-inner {
+  background: rgba(14, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(250, 66, 66, 0.45);
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  padding: .5rem 1rem;
+}
+
+/* Style the checkboxes inside the .lbl-toggle */
+.lbl-toggle input[type="checkbox"] {
+  position: absolute;
+ display: none;
+}
+
+ 
+ 

@@ -9,20 +9,74 @@
 
   <body>
     <div class="main-content">
-      <button class="toggle-button" onclick="toggleSidebar()">☰</button>
+      <button id="main-page-button" class="toggle-button" onclick="toggleSidebar()">></button>
+
       <div class="tabset" id="tabset">
         <!-- Dynamic tabs will be populated here -->
-    </div>
-    <div class="tab-panels" id="tab-panels">
+      </div>
+      <div class="tab-panels" id="tab-panels">
       <!-- Dynamic tab panels will be populated here -->
     </div>
-
+    <div class="tab-panel" id="parameters-section">
+      <input type="checkbox" id="toggle-parameters" class="toggle">
+      <label class="lbl-toggle" for="toggle-parameters">Parameters</label>
+      <div class="collapsible-content">
+          <div class="content-inner">
+              <!-- Parameter input form goes here -->
+          </div>
+      </div>
+  </div>
+  
+  <div class="tab-panel" id="info-section">
+      <input type="checkbox" id="toggle-info" class="toggle">
+      <label class="lbl-toggle" for="toggle-info">Information</label>
+      <div class="collapsible-content">
+          <div class="content-inner">
+              <!-- Information section content goes here -->
+          </div>
+      </div>
+  </div>
+  
+  <div class="tab-panel" id="quantities-section">
+      <input type="checkbox" id="toggle-quantities" class="toggle">
+      <label class="lbl-toggle" for="toggle-quantities">Quantities</label>
+      <div class="collapsible-content">
+          <div class="content-inner">
+              <!-- Quantities selection section content goes here -->
+          </div>
+      </div>
+  </div>
+  
+  <div class="tab-panel" id="plots-section">
+      <input type="checkbox" id="toggle-plots" class="toggle">
+      <label class="lbl-toggle" for="toggle-plots">Plots</label>
+      <div class="collapsible-content">
+          <div class="content-inner">
+              <!-- Plot display section content goes here -->
+          </div>
+      </div>
+  </div>
+  
+  <div class="tab-panel" id="placeholder-section">
+      <input type="checkbox" id="toggle-placeholder" class="toggle">
+      <label class="lbl-toggle" for="toggle-placeholder">Placeholder</label>
+      <div class="collapsible-content">
+          <div class="content-inner">
+              <!-- Placeholder section content goes here -->
+          </div>
+      </div>
+  </div>
+  
+    
     </div>
     
     
     <div id="all">
       <div class="sidebar" id="sidebar">
-          
+        <div id="sidebar-button-container">
+          <button class="toggle-button" onclick="toggleSidebar()">X</button>
+      </div>
+      
           <button onclick="toggleCollapse('target-folder-content')">Target Folder</button>
           
           <div id="target-folder-content" class="collapsible-content">
@@ -40,8 +94,25 @@
               <!-- Checkboxes will be populated here -->
             </div>
             
-        </div>
-        <button id="run-algorithm">Run Algorithm</button>
+          </div> 
+          <button onclick="toggleCollapse('run-algorithm')">Run Algorithm</button>
+          <div id="run-algorithm" class="collapsible-content">
+            <div id="checkbox-container">
+              <!-- Checkboxes will be populated here -->
+              <br>
+              <input type="checkbox" id="space-registration" value="space registration">
+              <label for="space-registration">space registration</label>
+            </br>
+              <br>
+              <input type="checkbox" id="idk" value="idk">
+              <label for="idk">idk</label>
+            </br>
+            </div>
+            <div id="zarrify_button">
+              <button onclick="runSelection()">Run</button>
+            </div>
+         
+            </div>
         <button onclick="addNewTabPanel()">Add New Tab Panel</button>
 
         

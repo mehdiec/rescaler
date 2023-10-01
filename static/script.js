@@ -138,18 +138,21 @@ function sendToStreamlit() {
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.querySelector('.main-content');
-    
+    const mainPageButton = document.getElementById('main-page-button'); // Get the main page button
+
     if (sidebar.style.width === '0px' || !sidebar.style.width) {
         sidebar.style.width = '25%';
-        sidebar.style.padding = '20px';  /* Restore padding when expanded */
+        sidebar.style.padding = '20px';
         mainContent.style.marginLeft = '25%';
+        mainPageButton.style.display = 'none'; // Hide the main page button
     } else {
         sidebar.style.width = '0px';
-        sidebar.style.padding = '0';  /* Remove padding when collapsed */
+        sidebar.style.padding = '0';
         mainContent.style.marginLeft = '0';
+        mainPageButton.style.display = 'block'; // Show the main page button
     }
 }
- 
+
 
  
 
@@ -324,4 +327,11 @@ function validateAndSend(folder) {
     // Logic to validate the parameters and send them to the backend
     // You can access the form elements by their IDs or names
     console.log("Validate and send data for folder:", folder);
+}
+
+function runSelection() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
+
+    console.log("Selected checkboxes: ", selectedValues);
 }
